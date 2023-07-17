@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { error, json } from '@sveltejs/kit';
 import * as jose from 'jose';
 
 import { APPLE_KID, APPLE_TEAM_ID, APPLE_PRIVATE_KEY } from '$env/static/private';
@@ -9,8 +9,7 @@ const teamID = APPLE_TEAM_ID;
 const alg = 'ES256';
 const secret = await jose.importPKCS8(pkcs8, alg)
 
-/** @type {import('./$types').PageServerLoad} */
-export async function load() {
+export async function GET() {
     const jwt = await new jose.SignJWT({})
         .setProtectedHeader({ alg, kid })
         .setIssuedAt()
@@ -19,7 +18,7 @@ export async function load() {
         .sign(secret);
 
     if (jwt) {
-        return { jwt };
+        return json({ jwt });
     }
 
     throw error(500);

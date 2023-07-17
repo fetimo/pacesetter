@@ -55,11 +55,9 @@ export const createPlaylist = async (name, tracks) => {
     const boop = await req.json();
 
     await addTracksToPlaylist(boop.data[0].id, tracks);
-    console.log('createPlaylist boop', boop);
 };
 
 export const trimToDuration = (tracks) => {
-    console.log('tracks', tracks);
     // Shuffle everything
     // Reduce until time met
     const shuffledTracks = shuffle([...tracks]);
@@ -75,6 +73,5 @@ export const trimToDuration = (tracks) => {
         },
         { tracks: [], duration: 0 }
     );
-    console.log('x', x);
     return x.tracks;
 };

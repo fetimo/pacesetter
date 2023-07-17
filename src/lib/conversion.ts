@@ -57,9 +57,10 @@ export function genreToBPM(genre: string) {
 * Shuffles array in place.
 */
 export function shuffle(a: []) {
-    for (let i = a.length - 1; i > 0; i--) {
+    const copy = [...a];
+    for (let i = copy.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
+        [copy[i], copy[j]] = [copy[j], copy[i]];
     }
-    return a;
+    return copy;
 }
