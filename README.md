@@ -22,3 +22,5 @@ You'll need the following:
 * APPLE_KID = A 10-character key identifier from your Apple Developer account
 * APPLE_TEAM_ID = Your Apple Developer team ID
 * APPLE_PRIVATE_KEY = Your p8 certificate from Apple
+* PUBLIC_SPOTIFY_CLIENT_ID = Registered Spotify app ID
+* VITE_REDIRECT_TARGET = Redirect URL for Spotify on auth

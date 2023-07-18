@@ -86,13 +86,13 @@
 		playlist.set(pl);
 
 		state.set(State.PLAYLIST_SELECTED);
-		let tracks = provider.getTracksFromPlaylist(pl);
-		total.set(tracks.length);
 		state.set(State.TRACKS_LOADING);
+		let tracks = await provider.getTracksFromPlaylist(pl);
+		total.set(tracks.length);
 		tracks = trimToDuration(tracks);
 
 		const promises = tracks.map(async (track) => {
-			const bpm = await searchTrack(track);
+			const bpm = track.tempo ? { tempo: track.tempo } : await searchTrack(track);
 			return {
 				...track,
 				isIndeterminate: !bpm.tempo,
@@ -134,13 +134,13 @@
 	}
 
 	const searchTrack = async (track) => {
-		const x = await fetch(
+		const req = await fetch(
 			`/bpm?track=${encodeURIComponent(track.attributes.name)}&artist=${encodeURIComponent(
 				track.attributes.artistName
 			)}`
 		);
 
-		const res = await x.json();
+		const res = await req.json();
 
 		return res;
 	};
