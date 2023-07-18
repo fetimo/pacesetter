@@ -10,7 +10,6 @@ Supports Apple Music and Spotify.
 
 ## TODO
 
-* Get it hosted
 * Add more types
 
 ## .env
