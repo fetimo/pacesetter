@@ -6,13 +6,12 @@ You tell it the duration it needs to last and the playlist to base it on. It the
 
 If a match isn't found in the BPM database then it looks at the genre and plucks a random value for that genre that is statistically likely (the UI also indicates this). But that's not great and I might try some other techniques if I use this enough.
 
-Only supports Apple Music atm, I might add Spotify support.
+Supports Apple Music and Spotify.
 
 ## TODO
 
-* Refactor all the things
-* Make a suggested cute playlist name?
-* Spotify support
+* Get it hosted
+* Add more types
 
 ## .env
 
