@@ -1,5 +1,5 @@
 import { SpotifyApi } from '@spotify/web-api-ts-sdk';
-import { PUBLIC_SPOTIFY_CLIENT_ID } from '$env/static/public';
+import { PUBLIC_SPOTIFY_CLIENT_ID, PUBLIC_SPOTIFY_REDIRECT } from '$env/static/public';
 
 let api: SpotifyApi;
 
@@ -7,7 +7,7 @@ const SpotifyMusicProvider = {
     init: async () => {
         api = SpotifyApi.withUserAuthorization(
             PUBLIC_SPOTIFY_CLIENT_ID,
-            "http://localhost:5173",
+            PUBLIC_SPOTIFY_REDIRECT,
             ["playlist-modify-public", "playlist-modify-private"]
         );
     },
