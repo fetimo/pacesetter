@@ -31,7 +31,7 @@ let api: MusicKitT;
 
 const getAllPlaylists = async (accum: PacesetterPlaylist[], offset = 0): Promise<PacesetterPlaylist[]> => {
     try {
-        const boop = await api.library.playlists(null, { offset });
+        const boop = await api.api.library.playlists(null, { offset });
         if (!boop.length) {
             return accum;
         }
