@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { setContext } from 'svelte';
+	import { onMount, setContext } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { key } from '$lib/api';
 	import { genreToBPM, shuffle } from '$lib/conversion';
@@ -60,6 +60,7 @@
 	async function logout() {
 		state.set(State.READY);
 		service.set(Service.None);
+		sessionStorage.removeItem('service');
 		return provider.logout();
 	}
 
@@ -74,6 +75,7 @@
 		}
 
 		await provider.init();
+		sessionStorage.setItem('service', value.toString());
 		state.set(State.PLAYLISTS_LOADING);
 		const pl = await provider.getPlaylists();
 		playlists.set(pl);
@@ -144,6 +146,17 @@
 
 		return res;
 	};
+
+	onMount(() => {
+		const prevService = sessionStorage.getItem('service');
+		if (prevService) {
+			setService({
+				target: {
+					value: prevService
+				}
+			});
+		}
+	});
 
 	setContext(key, {
 		createPlaylist,

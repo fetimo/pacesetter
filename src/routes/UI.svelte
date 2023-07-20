@@ -21,11 +21,16 @@
 	} = getContext(key);
 </script>
 
-<main class="container">
-	<h1>Welcome to Pacesetter</h1>
+<section class="container">
+	<hgroup>
+		<h1>Welcome to Pacesetter</h1>
+		<h2>Create the perfect exercise playlist from music you love</h2>
+	</hgroup>
 	{#if !$service}
+		<h5>Choose your music provider</h5>
 		<button value={Service.Apple} on:click={setService}>Apple Music</button>
 		<button value={Service.Spotify} on:click={setService}>Spotify</button>
+		<p><small>Psst, you might need to allow popups for login to work</small></p>
 	{:else}
 		<button on:click={logout}>Logout</button>
 
@@ -105,7 +110,7 @@
 		</button>
 		<a class="secondary" data-sveltekit-reload href="/" role="button">Start over</a>
 	{/if}
-</main>
+</section>
 
 <style>
 	.scroll {
