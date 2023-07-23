@@ -109,6 +109,14 @@
 			Save playlist
 		</button>
 		<a class="secondary" data-sveltekit-reload href="/" role="button">Start over</a>
+		{#if $service === Service.Apple}
+			<p class="info-notice">
+				<small
+					>BPM data provided by <a href="https://getsongbpm.com" target="_blank">GetSongBPM</a
+					></small
+				>
+			</p>
+		{/if}
 	{/if}
 </section>
 
@@ -117,5 +125,9 @@
 		overflow: scroll;
 		height: 50vh;
 		min-height: 10rem;
+	}
+
+	.info-notice {
+		margin-top: 1rem;
 	}
 </style>
