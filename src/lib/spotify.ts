@@ -1,25 +1,8 @@
-import type { IRedirectionStrategy, Playlist } from '@spotify/web-api-ts-sdk'
+import type { Playlist } from '@spotify/web-api-ts-sdk'
 import { SpotifyApi } from '@spotify/web-api-ts-sdk';
 import { PUBLIC_SPOTIFY_CLIENT_ID, PUBLIC_SPOTIFY_REDIRECT } from '$env/static/public';
 
 let api: SpotifyApi;
-
-class DocumentLocationRedirectionStrategy implements IRedirectionStrategy {
-    private callback = async () => {
-        console.log('callback');
-    }
-
-    constructor(props: any) {
-        this.callback = props.callback;
-    }
-
-    public async redirect(targetUrl: string | URL): Promise<void> {
-        document.location = targetUrl.toString();
-    }
-
-    public async onReturnFromRedirect(): Promise<void> {
-    }
-}
 
 type CreatePlaylistArgs = {
     name: string;
@@ -27,16 +10,11 @@ type CreatePlaylistArgs = {
 }
 
 const SpotifyMusicProvider = {
-    init: async ({ callback = null } = {}) => {
-        const config = {
-            redirectionStrategy: new DocumentLocationRedirectionStrategy({ callback }),
-        };
-
+    init: async () => {
         api = SpotifyApi.withUserAuthorization(
             PUBLIC_SPOTIFY_CLIENT_ID,
             PUBLIC_SPOTIFY_REDIRECT,
             ["playlist-modify-public", "playlist-modify-private"],
-            config
         );
     },
     login: async () => api.authenticate(),

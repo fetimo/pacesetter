@@ -1,17 +1,21 @@
 import { json } from '@sveltejs/kit';
-
-import { GETSONGBPM_KEY } from '$env/static/private';
+import { SpotifyApi } from '@spotify/web-api-ts-sdk';
+import { PUBLIC_SPOTIFY_CLIENT_ID } from '$env/static/public';
+import { SPOTIFY_CLIENT_SECRET } from '$env/static/private';
 
 export async function GET(context) {
+    const spotify = SpotifyApi.withClientCredentials(PUBLIC_SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET);
     const url = new URL(context.request.url);
-    const query = `https://api.getsongbpm.com/search/?api_key=${GETSONGBPM_KEY}&type=both&limit=1&lookup=song:${encodeURIComponent(url.searchParams.get('track') || '')} artist:${encodeURIComponent(url.searchParams.get('artist') || '')}`;
-    const x = await fetch(query);
+    const q = `*%20track:${encodeURIComponent(url.searchParams.get('track') || '')}%20artist:${encodeURIComponent(url.searchParams.get('artist') || '')}`;
+    const res = await spotify.search(q, ['track'], 'GB', 1);
 
-    const res = await x.json();
+    const track = res.tracks.items[0];
 
-    if (!res.search.error) {
-        return json(res.search[0]);
+    if (track) {
+        const features = await spotify.tracks.audioFeatures(track.id);
+        console.log('features', features);
+        return json(features);
     }
 
-    return json({});
+    return json(null);
 }

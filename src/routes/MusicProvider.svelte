@@ -98,7 +98,7 @@
 			return {
 				...track,
 				isIndeterminate: !bpm.tempo,
-				tempo: Number(bpm.tempo) || genreToBPM(track.attributes.genreNames[0])
+				tempo: Number(Math.round(bpm.tempo)) || genreToBPM(track.attributes.genreNames[0])
 			};
 		});
 
