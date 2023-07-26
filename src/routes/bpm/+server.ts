@@ -13,7 +13,6 @@ export async function GET(context) {
 
     if (track) {
         const features = await spotify.tracks.audioFeatures(track.id);
-        console.log('features', features);
         return json(features);
     }
 
