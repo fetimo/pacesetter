@@ -36,7 +36,9 @@
 
 		<label for="targetDuration">Target duration</label>
 		<input
-			type="text"
+			type="number"
+			step="5"
+			min="5"
 			id="targetDuration"
 			name="targetDuration"
 			placeholder="Time in minutes"
