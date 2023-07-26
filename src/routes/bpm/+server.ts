@@ -17,5 +17,5 @@ export async function GET(context) {
         return json(features);
     }
 
-    return json(null);
+    return json({});
 }
