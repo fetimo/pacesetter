@@ -6,6 +6,7 @@
 		createPlaylist,
 		handleSelectPlaylist,
 		logout,
+		parsePlaylist,
 		playlist,
 		playlistName,
 		playlists,
@@ -84,6 +85,9 @@
 			{#each $tracks as track}
 				<li>
 					{track.attributes.name}
+					<small class="xs">
+						{track.attributes.artistName}
+					</small>
 					<small>
 						({track.tempo || ''}{#if track.isIndeterminate}<span data-tooltip="Estimated BPM"
 								>*</span
@@ -110,7 +114,7 @@
 		>
 			Save playlist
 		</button>
-		<a class="secondary" data-sveltekit-reload href="/" role="button">Start over</a>
+		<button class="secondary" on:click={parsePlaylist}>Regenerate</button>
 	{/if}
 </section>
 
@@ -119,5 +123,10 @@
 		overflow: scroll;
 		height: 50vh;
 		min-height: 10rem;
+	}
+
+	.xs {
+		font-size: 80%;
+		color: #898c8f;
 	}
 </style>

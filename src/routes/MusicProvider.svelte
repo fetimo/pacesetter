@@ -83,37 +83,44 @@
 		return service;
 	}
 
+	async function parsePlaylist() {
+		playlist.subscribe(async (pl) => {
+			state.set(State.TRACKS_LOADING);
+			let tracks = await provider.getTracksFromPlaylist(pl);
+			total.set(tracks.length);
+			tracks = trimToDuration(tracks);
+
+			const promises = tracks.map(async (track) => {
+				const bpm = track.tempo ? { tempo: track.tempo } : await searchTrack(track);
+				return {
+					...track,
+					isIndeterminate: !bpm.tempo,
+					tempo: Number(Math.round(bpm.tempo)) || genreToBPM(track.attributes.genreNames[0])
+				};
+			});
+
+			tracks = Promise.all(promises).then((results) => {
+				tracks = results
+					.sort((a, b) => a.tempo - b.tempo)
+					.reduceRight((acc, val, i) => {
+						return i % 2 === 0 ? [...acc, val] : [val, ...acc];
+					}, []);
+				tracksy.set(tracks);
+
+				state.set(State.TRACKS_LOADED);
+			});
+
+			promises.forEach((p) => p.then(() => progress.update((n) => n + 1)));
+		});
+	}
+
 	async function handleSelectPlaylist(event) {
 		const pl = await provider.getPlaylist(event.target.value);
 		playlist.set(pl);
+		console.log('set playlist', pl);
 
 		state.set(State.PLAYLIST_SELECTED);
-		state.set(State.TRACKS_LOADING);
-		let tracks = await provider.getTracksFromPlaylist(pl);
-		total.set(tracks.length);
-		tracks = trimToDuration(tracks);
-
-		const promises = tracks.map(async (track) => {
-			const bpm = track.tempo ? { tempo: track.tempo } : await searchTrack(track);
-			return {
-				...track,
-				isIndeterminate: !bpm.tempo,
-				tempo: Number(Math.round(bpm.tempo)) || genreToBPM(track.attributes.genreNames[0])
-			};
-		});
-
-		tracks = Promise.all(promises).then((results) => {
-			tracks = results
-				.sort((a, b) => a.tempo - b.tempo)
-				.reduceRight((acc, val, i) => {
-					return i % 2 === 0 ? [...acc, val] : [val, ...acc];
-				}, []);
-			tracksy.set(tracks);
-
-			state.set(State.TRACKS_LOADED);
-		});
-
-		promises.forEach((p) => p.then(() => progress.update((n) => n + 1)));
+		parsePlaylist();
 	}
 
 	function trimToDuration(tracks) {
@@ -162,17 +169,18 @@
 		createPlaylist,
 		handleSelectPlaylist,
 		logout,
+		parsePlaylist,
 		playlistName,
 		playlists,
+		progress,
 		service,
 		Service,
 		setService,
 		state,
 		State,
 		targetDuration,
-		tracks: tracksy,
 		total,
-		progress
+		tracks: tracksy
 	});
 </script>
 
