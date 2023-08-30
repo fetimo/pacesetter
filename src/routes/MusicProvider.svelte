@@ -117,8 +117,6 @@
 	async function handleSelectPlaylist(event) {
 		const pl = await provider.getPlaylist(event.target.value);
 		playlist.set(pl);
-		console.log('set playlist', pl);
-
 		state.set(State.PLAYLIST_SELECTED);
 		parsePlaylist();
 	}
