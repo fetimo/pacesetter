@@ -88,6 +88,7 @@
 			state.set(State.TRACKS_LOADING);
 			let tracks = await provider.getTracksFromPlaylist(pl);
 			total.set(tracks.length);
+			progress.set(0);
 			tracks = trimToDuration(tracks);
 
 			const promises = tracks.map(async (track) => {
@@ -99,6 +100,8 @@
 				};
 			});
 
+			promises.forEach((p) => p.then(() => progress.update((n) => n + 1)));
+
 			tracks = Promise.all(promises).then((results) => {
 				tracks = results
 					.sort((a, b) => a.tempo - b.tempo)
@@ -109,8 +112,6 @@
 
 				state.set(State.TRACKS_LOADED);
 			});
-
-			promises.forEach((p) => p.then(() => progress.update((n) => n + 1)));
 		});
 	}
 
