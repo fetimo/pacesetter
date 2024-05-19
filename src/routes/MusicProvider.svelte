@@ -84,11 +84,11 @@
 	}
 
 	async function parsePlaylist() {
+                progress.set(0);
 		playlist.subscribe(async (pl) => {
 			state.set(State.TRACKS_LOADING);
 			let tracks = await provider.getTracksFromPlaylist(pl);
 			total.set(tracks.length);
-			progress.set(0);
 			tracks = trimToDuration(tracks);
 
 			const promises = tracks.map(async (track) => {
