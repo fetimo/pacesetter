@@ -64,9 +64,9 @@ const addTracksToPlaylist = async ({ id, tracks }: AddTracksToPlaylistArgs) => {
     return req;
 };
 
-async function getAdditionalTracks(playlist: Resource, accum) {
-    if (playlist.relationships.tracks.next) {
-        const req = await fetch(`https://api.music.apple.com/${playlist.relationships.tracks.next}`, {
+async function getAdditionalTracks(next: string, accum) {
+    if (next) {
+        const req = await fetch(`https://api.music.apple.com/${next}`, {
             headers: {
                 Authorization: `Bearer ${api.developerToken}`,
                 'music-user-token': api.musicUserToken,
@@ -77,7 +77,7 @@ async function getAdditionalTracks(playlist: Resource, accum) {
         const res = await req.json();
         const accumTracks = [...res.data, ...accum];
         if (res.next) {
-            return getAdditionalTracks(playlist, accumTracks)
+            return getAdditionalTracks(res.next, accumTracks)
         }
 
         return accumTracks;
@@ -144,7 +144,7 @@ const AppleMusicProvider = {
     getPlaylist: async (id: string) => api.api.library.playlist(id),
     getTracksFromPlaylist: async (playlist: Resource) => {
         if (playlist.relationships.tracks.next) {
-            return getAdditionalTracks(playlist, playlist.relationships.tracks.data);
+            return getAdditionalTracks(playlist.relationships.tracks.next, playlist.relationships.tracks.data);
         }
         return playlist.relationships.tracks.data;
     },
