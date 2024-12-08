@@ -30,7 +30,6 @@
 	{#if !$service}
 		<h5>Choose your music provider</h5>
 		<button value={Service.Apple} on:click={setService}>Apple Music</button>
-		<button value={Service.Spotify} on:click={setService}>Spotify</button>
 		<p><small>Psst, you might need to allow popups for login to work</small></p>
 	{:else}
 		<button on:click={logout}>Logout</button>
@@ -77,7 +76,7 @@
 		<p aria-busy="true">Loading your playlists&hellip;</p>
 	{/if}
 	{#if $state === State.TRACKS_LOADING}
-		<progress value={$progress} max={$total} />
+		<progress value={$progress} max={$total}></progress>
 	{/if}
 
 	{#if $state === State.TRACKS_LOADED || $state === State.PLAYLIST_SAVING || $state === State.PLAYLIST_SAVED}
@@ -115,6 +114,14 @@
 			Save playlist
 		</button>
 		<button class="secondary" on:click={parsePlaylist}>Regenerate</button>
+		{#if $service === Service.Apple}
+			<p class="info-notice">
+				<small
+					>BPM data provided by <a href="https://cyanite.ai" target="_blank">Cyanite</a
+					></small
+				>
+			</p>
+		{/if}
 	{/if}
 </section>
 

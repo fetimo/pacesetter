@@ -21,5 +21,5 @@ export async function GET() {
         return json({ jwt });
     }
 
-    throw error(500);
+    error(500);
 }

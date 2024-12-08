@@ -20,7 +20,6 @@
 	enum Service {
 		None = 0,
 		Apple = 1,
-		Spotify = 2
 	}
 
 	type Provider = {
@@ -70,8 +69,6 @@
 
 		if (value === Service.Apple) {
 			provider = (await import('$lib/apple')).default;
-		} else {
-			provider = (await import('$lib/spotify')).default;
 		}
 
 		await provider.init();
